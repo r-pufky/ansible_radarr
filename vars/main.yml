@@ -1,0 +1,72 @@
+---
+###############################################################################
+# Default Radarr Package Dependencies
+###############################################################################
+# Default required packages for Radarr install.
+
+radarr_default_packages:
+  - 'mediainfo'
+  - 'curl'
+  - 'gnupg2'
+  - 'dirmngr'
+  - 'sqlite3'
+  - 'mono-runtime'
+
+###############################################################################
+# Default Radarr User Group
+###############################################################################
+# Default group settings if an radarr user is force created.
+
+radarr_default_group:
+  name: 'media'
+  gid:  5555
+
+###############################################################################
+# Default Radarr User Account
+###############################################################################
+# Default user settings if an radarr user is force created.
+#
+# Logins are disabled.
+
+radarr_default_user:
+  name:            'media'
+  group:           'media'
+  uid:             5555
+  shell:           '/usr/sbin/nologin'
+  home:            '/nonexistent'
+  create_home:     false
+  password:        '!'
+  password_lock:   true
+  update_password: 'always'
+  expires:         -1
+  system:          true
+
+###############################################################################
+# Radarr Mono Version
+###############################################################################
+# Default Mono library to use if not in supported libraries.
+#
+# Reference:
+# * https://download.mono-project.com/repo/debian
+
+radarr_default_mono_library: 'stable-buster'
+radarr_mono_supported_libraries:
+  - 'bionic'
+  - 'buster'
+  - 'focal'
+  - 'jessie'
+  - 'precise'
+  - 'raspbianbuster'
+  - 'raspbianjessie'
+  - 'raspbianstretch'
+  - 'stretch'
+  - 'trusty'
+  - 'wheezy'
+  - 'xenial'
+
+###############################################################################
+# Radarr Configuration Version
+###############################################################################
+# Base version used for initial role creation.
+
+radarr_version: '3.0.2.4552'

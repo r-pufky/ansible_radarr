@@ -1,0 +1,56 @@
+---
+###############################################################################
+# Radarr Restore
+###############################################################################
+# Restore an existing radarr instance.
+#
+# Reference:
+# * https://github.com/NasKar2/freenas-backup-apps/blob/master/radarrbackup.sh
+
+- name: 'restore | radarr data is mounted, not local.'
+  ansible.builtin.fail:
+    msg: 'Restore task cannot be executed against a mountpoint; only local.'
+
+- name: 'restore | shutdown radarr for restore'
+  ansible.builtin.service:
+    name:  'radarr'
+    state: 'stopped'
+
+- name: 'restore | setup staging'
+  ansible.builtin.file:
+    path:  '{{ radarr_staging }}'
+    mode:  0700
+    state: 'directory'
+
+- name: 'restore | prep restore'
+  ansible.builtin.file:
+    path:  '{{ radarr_config }}'
+    owner: '{{ radarr_user }}'
+    group: '{{ radarr_group }}'
+    mode:  0750
+    state: 'directory'
+
+# tar preserves file permissions
+# Radarr install has binaries as well, only overwrite.
+- name: 'restore | restore backup'
+  ansible.builtin.unarchive:
+    src:  '{{ radarr_local_backup }}'
+    dest: '{{ radarr_config }}'
+    extra_opts: '--strip-components=1'
+
+- name: 'restore | set ownership'
+  ansible.builtin.command: 'chown -R {{ radarr_user }}:{{ radarr_group }} {{ radarr_config }}'
+
+  args:
+    warn: false
+  changed_when: false
+
+- name: 'restore | start radarr'
+  ansible.builtin.service:
+    name:  'radarr'
+    state: 'started'
+
+- name: 'restore | cleanup'
+  ansible.builtin.file:
+    path:  '{{ radarr_staging }}'
+    state: 'absent'

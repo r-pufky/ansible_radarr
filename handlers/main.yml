@@ -1,0 +1,14 @@
+---
+###############################################################################
+# Radarr Handlers
+###############################################################################
+
+- name: 'reload systemd'
+  ansible.builtin.systemd:
+    daemon-reload: true
+
+- name: 'restart radarr'
+  ansible.builtin.systemd:
+    name:    'radarr'
+    enabled: true
+    state:   'restarted'
