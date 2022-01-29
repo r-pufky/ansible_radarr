@@ -1,0 +1,47 @@
+---
+###############################################################################
+# Manager Radarr Users
+###############################################################################
+# Check if user exists and create if enabled.
+#
+# Args:
+#   radarr_user: string radarr username.
+#   radarr_group: string radarr group.
+#   radarr_create_user: boolean true to create role default user.
+#   radarr_default_user: dict containing builitin.user options for radarr.
+#   radarr_default_group: dict containing builitin.group options for radarr.
+
+- name: 'manage users | confirm user exists'
+  ansible.builtin.command: 'id {{ radarr_user }}'
+  register: _radarr_user_exists
+  changed_when: _radarr_user_exists.rc > 0
+  failed_when: false
+
+- name: 'manage users | confirm group exists'
+  ansible.builtin.command: 'groups {{ radarr_group }}'
+  register: _radarr_group_exists
+  changed_when: _radarr_group_exists.rc > 0
+  failed_when: false
+
+- name: 'manage users | create radarr group'
+  ansible.builtin.group:
+    name:  '{{ radarr_default_group.name }}'
+    gid:   '{{ radarr_default_group.gid }}'
+    state: 'present'
+  when: radarr_create_user and _radarr_group_exists.rc != 0
+
+- name: 'manage users | create radarr user (logins disabled)'
+  ansible.builtin.user:
+    name:            '{{ radarr_default_user.name }}'
+    group:           '{{ radarr_default_user.group }}'
+    uid:             '{{ radarr_default_user.uid }}'
+    shell:           '{{ radarr_default_user.shell }}'
+    home:            '{{ radarr_default_user.home }}'
+    create_home:     '{{ radarr_default_user.create_home }}'
+    password:        '{{ radarr_default_user.password }}'
+    password_lock:   '{{ radarr_default_user.password_lock }}'
+    update_password: '{{ radarr_default_user.update_password }}'
+    expires:         '{{ radarr_default_user.expires }}'
+    system:          '{{ radarr_default_user.system }}'
+    state:           'present'
+  when: radarr_create_user and _radarr_user_exists.rc != 0

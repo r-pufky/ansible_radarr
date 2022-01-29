@@ -1,0 +1,15 @@
+[Unit]
+Description=Radarr
+After=syslog.target network.target
+
+[Service]
+User={{ radarr_user }}
+Group={{ radarr_group }}
+Type=simple
+ExecStart={{ radarr_dir }}/Radarr --nobrowser -data={{ radarr_config }}
+TimeoutStopSec=20
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
