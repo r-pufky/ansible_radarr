@@ -27,9 +27,6 @@ radarr_staging: '/var/lib/radarr-staging'
 # Target location of backup file on ansible host.
 radarr_local_backup: 'host_vars/data/radarr-config.tar.gz'
 
-# Subdomain hint for radarr service.
-radarr_subdomain: 'radarr'
-
 ###############################################################################
 # Radarr config.xml Configuration
 ###############################################################################
