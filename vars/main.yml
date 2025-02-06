@@ -1,72 +1,65 @@
 ---
+# yamllint disable rule:line-length
 ###############################################################################
-# Default Radarr Package Dependencies
+# Radarr Role Options
 ###############################################################################
-# Default required packages for Radarr install.
-
-radarr_default_packages:
-  - 'mediainfo'
-  - 'curl'
-  - 'gnupg2'
-  - 'dirmngr'
-  - 'sqlite3'
-  - 'mono-runtime'
-
-###############################################################################
-# Default Radarr User Group
-###############################################################################
-# Default group settings if an radarr user is force created.
-
-radarr_default_group:
-  name: 'media'
-  gid:  5555
-
-###############################################################################
-# Default Radarr User Account
-###############################################################################
-# Default user settings if an radarr user is force created.
+# Base version used for current role creation. Radarr will auto update once
+# properly installed; revisiting role tasks is not necessary unless a major
+# version is released. Additional configuration settings may need to be added
+# to defaults for point releases.
 #
-# Logins are disabled.
-
-radarr_default_user:
-  name:            'media'
-  group:           'media'
-  uid:             5555
-  shell:           '/usr/sbin/nologin'
-  home:            '/nonexistent'
-  create_home:     false
-  password:        '!'
-  password_lock:   true
-  update_password: 'always'
-  expires:         -1
-  system:          true
-
-###############################################################################
-# Radarr Mono Version
-###############################################################################
-# Default Mono library to use if not in supported libraries.
+# Radarr uses the generic Servarr installation scripts.
 #
 # Reference:
-# * https://download.mono-project.com/repo/debian
+# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+# * https://github.com/Radarr/Radarr/releases
 
-radarr_default_mono_library: 'stable-buster'
-radarr_mono_supported_libraries:
-  - 'bionic'
-  - 'buster'
-  - 'focal'
-  - 'jessie'
-  - 'precise'
-  - 'raspbianbuster'
-  - 'raspbianjessie'
-  - 'raspbianstretch'
-  - 'stretch'
-  - 'trusty'
-  - 'wheezy'
-  - 'xenial'
+# Last time Radarr options were validated against a default configuration.
+radarr_role_validate_date: '2025-02-05'
+radarr_role_validate_release: 'bookworm'
+radarr_role_validate_version: 'v5.18.4.9674'
+radarr_role_validate_script_release: '3.0.12'
+radarr_role_validate_script_date: '2024-04-09'
 
 ###############################################################################
-# Radarr Configuration Version
+# APT Packages
 ###############################################################################
-# Base version used for initial role creation.
 
-radarr_version: '3.0.2.4552'
+radarr_role_packages:
+  - 'sqlite3'  # Radarr DB.
+  - 'gnupg2'  # GPG for certificates.
+  - 'ca-certificates'  # up to date certificates for certificate validation.
+  - 'libicu72'  # International Unicode support for .NET.
+
+###############################################################################
+# Radarr GitHub Options
+###############################################################################
+# Reference:
+# * https://github.com/Radarr/Radarr/releases/latest
+
+radarr_role_github_owner: 'Radarr'
+radarr_role_github_repo: 'Radarr'
+radarr_role_github_repo_archive_type: 'tar.gz'
+radarr_role_github_extract_dest: '/opt/radarr'
+radarr_role_github_extract_symlink_target: '/opt/radarr/radarr'
+
+###############################################################################
+# Default Radarr User/Group
+###############################################################################
+
+radarr_role_group:
+  name: 'media'
+  gid: 5555
+
+radarr_role_user:
+  name: 'media'
+  group: 'media'
+  uid: 5555
+  shell: '/usr/sbin/nologin'
+  home: '/nonexistent'
+  create_home: false
+  password: '!'
+  password_lock: true
+  update_password: 'always'
+  expires: -1
+  system: true

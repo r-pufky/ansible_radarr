@@ -1,48 +1,121 @@
 ---
+# yamllint disable rule:line-length
 ###############################################################################
 # Radarr Role Configuration
 ###############################################################################
-# User that radarr will run under. Assumes externally managed.
-radarr_user:  'media'
+
+# Version.
+#
+# Older versions (<5) are not supported.
+#
+# Values:
+#   {VERSION}: tagged release to use ('v5.18.4.9674').
+#    'latest': use latest stable release.
+#
+# Default: 'latest'.
+radarr_service_version: 'latest'
+
+# Remove old installs on upgrade success? Default: True.
+radarr_service_delete_old_versions_enable: true
+
+# Absolute path to database and metadata location. Default: '/var/lib/radarr'.
+radarr_service_data_dir: '/var/lib/radarr'
+
+# Service Umask. Default: '0002'.
+radarr_service_u_mask: '0002'
+
+# Force overwrite existing install?
+#
+# DATA DESTRUCTIVE.
+#
+# Removes existing cached downloaded archives and existing same-version install
+# directories (if any). Any user data in these directories are DESTROYED.
+#
+# Default: False.
+radarr_service_force_overwrite: false
+
+# Automatically restart Radarr daily?
+#
+# Restarting the Radarr service will automatically apply any downloaded auto
+# updates.
+#
+# Default: True.
+radarr_service_restart_daily_enable: true
+
+# Only apply configuration?
+#
+# Reduces role application time by ONLY applying configuration changes. Does
+# NOT affect radarr_media_set_perms_file_enable.
+#
+# This should ONLY be used after the role has been fully run once.
+#
+# Useful when adding a change without reconfiguring the whole system or
+# checking and installing a new version. Suggest applying with extra options:
+#
+#   ansible-playbook site.yml --tags Radarr -e 'radarr_service_force_config_only_enable=true'
+#
+# Default: False.
+radarr_service_force_config_only_enable: false
+
+###############################################################################
+# Radarr User
+###############################################################################
+
+# User that Radarr will run under.
+#
+# Enable radarr_create_user if this account is not externally managed.
+#
+# Default: 'media'.
+radarr_user: 'media'
+
+# Group that Radarr will run under.
+#
+# Enable radarr_create_user if this group is not externally managed.
+#
+# Default: 'media'.
 radarr_group: 'media'
 
-# Create 'media' user if not detected? See: vars/main.yml.
-radarr_create_user: false
-
-# Generic architecture for platform: x64, arm, arm64
-radarr_arch_generic: 'x64'
-
-# C architecture for platform: linux, linuxmusl
-radarr_arch_c: 'linux'
-
-# Installation directory
-radarr_dir: '/var/lib/radarr'
-
-# Configuration directory
-radarr_config: '/var/lib/radarr-config'
-
-# Staging directory for backups
-radarr_staging: '/var/lib/radarr-staging'
-
-# Target location of backup file on ansible host.
-radarr_local_backup: 'host_vars/data/radarr-config.tar.gz'
+# Create radarr_user, radarr_group if not detected?
+#
+# Applied via r_pufky.srv.users, see vars/main.yml for default user attributes.
+#
+# Default: True.
+radarr_create_user: true
 
 ###############################################################################
-# Radarr config.xml Configuration
+# Media Permissions
 ###############################################################################
 
-radarr_port:                  '7878' # http port
-radarr_bind_address:          '*'
-# Radarr requires ssl port to be defined even if unused
-radarr_ssl_port:              '9898' # https port
-radarr_enable_ssl:            false
-radarr_api_key:               ''
-radarr_authentication_method: 'None'
-radarr_log_level:             'info'
-radarr_launch_browser:        false # Default: undefined
-radarr_branch:                'master'
-radarr_ssl_cert_hash:         ''
-radarr_update_mechanism:      'BuiltIn'
-radarr_analytics_enabled:     false # Default: undefined
-radarr_update_automatically:  false # Default: undefined
-radarr_url_base:              ''
+# Root media storage folders.
+#
+# Folders will be created/set with radarr_user, radarr_group,
+# radarr_media_perms_folder.
+#
+# Default: [].
+radarr_media_root_folders: []
+
+# Media folder permissions octal.
+#
+# Media folders specified by radarr_media_root_folders will always be
+# recursively set using radarr_media_perms_folder, radarr_user, and
+# radarr_group.
+#
+# Default: '0755'.
+radarr_media_perms_folder: '0755'
+
+# Enable setting of media file permissions?
+#
+# Set file permissions within radarr_media_root_folders using
+# radarr_media_perms_file, radarr_user, and radarr_group. Large sets of files
+# may be slow to set permissions.
+#
+# Useful when first configuring to ensure service has access to all specified
+# media locations. Suggest applying with extra options:
+#
+#   ansible-playbook site.yml --tags Radarr -e 'radarr_media_set_perms_file_enable=true'
+#
+# Default: False.
+radarr_media_set_perms_file_enable: false
+
+# Media file permissions octal. Default: '0644'.
+radarr_media_perms_file: '0644'

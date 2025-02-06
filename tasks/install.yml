@@ -1,0 +1,40 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Radarr Install
+###############################################################################
+# Install specified version from github release.
+
+- name: 'Install | packages'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.apt'
+  vars:
+    apt_packages:
+      - '{{ radarr_role_packages }}'
+    apt_package_update_cache: true
+
+# TODO(role): live test github download, may need to be adjusted for Sonarr/Radarr.
+- name: 'Install | Radarr package {{ radarr_service_version }}'
+  when: not radarr_service_force_config_only_enable
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.github'
+  vars:
+    github_repo_owner: '{{ radarr_role_github_owner }}'
+    github_repo_repo: '{{ radarr_role_github_repo }}'
+    github_repo_release: '{{ radarr_service_version }}'
+    github_repo_archive_type: '{{ radarr_role_github_repo_archive_type }}'
+    github_file_owner: '{{ radarr_user }}'
+    github_file_group: '{{ radarr_group }}'
+    github_extract_dest: '{{ radarr_role_github_extract_dest }}'
+    github_extract_symlink_target: '{{ radarr_role_github_extract_symlink_target }}'
+    github_extract_migrate_files:
+      - 'radarr.db'
+      - 'radarr.db-shm'  # Radarr never closes DB's correctly.
+      - 'radarr.db-wal'
+      - 'logs.db'
+      - 'logs.db-shm'
+      - 'logs.db-wal'
+    github_extract_delete_old_versions: '{{ radarr_service_delete_old_versions_enable }}'
+    github_force_overwrite: '{{ radarr_service_force_overwrite }}'
+    github_extract_mode: 'a-st,o-rwx'
+    github_extract_extra_opts: '--strip-components=1'

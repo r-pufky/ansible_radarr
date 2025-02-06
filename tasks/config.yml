@@ -1,0 +1,131 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Radarr Config
+###############################################################################
+# Radarr is installed from source. Create systemd service and reload daemons,
+# create required directories, certificates, set config, and start service.
+# Service may not exist if first install.
+#
+# New config.xml options must be manually added to the template.
+#
+# Args:
+#   _radarr_uid: int - radarr user UID.
+#   _radarr_gid: int - radarr user GID.
+#
+# Reference:
+# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+
+- name: 'Config | Radarr service'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.systemd'
+  vars:
+    systemd_daemon_reload_enable: true
+    systemd_services:
+      - name: 'radarr'
+        state: 'present'
+        drop_in: false
+        unit:
+          description: 'Radarr Daemon'
+          after:
+            - 'syslog.target'
+            - 'network.target'
+        service:
+          type: 'simple'
+          exec_start: ['{{ radarr_role_github_extract_symlink_target }}/Radarr -nobrowser -data={{ radarr_service_data_dir }}']
+          timeout_stop_sec: 20
+          restart: 'always'  # always restart for periodic service restarts
+          runtime_max_sec: '{{ "1d" if radarr_service_restart_daily_enable else "infinity" }}'
+        exec:
+          user: '{{ radarr_user }}'
+          group: '{{ radarr_group }}'
+          u_mask: '{{ radarr_service_u_mask }}'
+        kill:
+          kill_mode: 'process'
+        install:
+          wanted_by:
+            - 'multi-user.target'
+
+- name: 'Config | stop Radarr'
+  ansible.builtin.service:
+    name: 'radarr'
+    state: 'stopped'
+
+- name: 'Prep | set {{ radarr_service_data_dir }}'
+  ansible.builtin.file:
+    path: '{{ radarr_service_data_dir }}'
+    owner: '{{ radarr_user }}'
+    group: '{{ radarr_group }}'
+    mode: '0775'
+    recurse: true
+    state: 'directory'
+  become: true
+
+- name: 'Prep | set {{ radarr_service_data_dir }}/radarr.pfx'  # noqa name[template] full path
+  when: radarr_config_enable_ssl
+  ansible.builtin.copy:
+    src: '{{ radarr_config_ssl_cert_path }}'
+    dest: '{{ radarr_service_data_dir }}/radarr.pfx'
+    owner: '{{ radarr_user }}'
+    group: '{{ radarr_group }}'
+    mode: '0640'
+    force: true
+
+- name: 'Prep | remove {{ radarr_service_data_dir }}/radarr.pfx'  # noqa name[template] full path
+  when: not radarr_config_enable_ssl
+  ansible.builtin.file:
+    dest: '{{ radarr_service_data_dir }}/radarr.pfx'
+    state: 'absent'
+
+- name: 'Prep | set {{ radarr_service_data_dir }}/update_script'  # noqa name[template] full path
+  when: not radarr_config_update_mechanism
+  ansible.builtin.copy:
+    src: '{{ radarr_config_update_script_path }}'
+    dest: '{{ radarr_service_data_dir }}/update_script'
+    owner: '{{ radarr_user }}'
+    group: '{{ radarr_group }}'
+    mode: '0750'
+    force: true
+
+- name: 'Prep | remove {{ radarr_service_data_dir }}/update_script'  # noqa name[template] full path
+  when: radarr_config_update_mechanism
+  ansible.builtin.file:
+    dest: '{{ radarr_service_data_dir }}/update_script'
+    state: 'absent'
+
+# Use UID/GID as some media filesystems may be remote.
+- name: 'Prep | set media root folders'
+  ansible.builtin.file:
+    path: '{{ item }}'
+    owner: '{{ _radarr_uid }}'
+    group: '{{ _radarr_gid }}'
+    mode: '{{ radarr_media_perms_folder }}'
+    recurse: true
+    state: 'directory'
+  become: true
+  loop: '{{ radarr_media_root_folders }}'
+
+# Use UID/GID as some media filesystems may be remote.
+- name: 'Prep | set media root files'
+  when: radarr_media_set_perms_file_enable
+  ansible.builtin.shell: |
+    find '{{ item }}' -type f -exec chmod {{ radarr_media_perms_file }} {}; chown {{ _radarr_uid }}:{{ _radarr_gid }} {} \;
+  changed_when: false
+  loop: '{{ radarr_media_root_folders }}'
+
+# Writing the configuration back requires to_json, ansible.utils.to_xml, and
+# xmltodict python3 package installed on both controller and node. Just use a
+# template instead.
+- name: 'Config | set Radarr configuration'
+  ansible.builtin.template:
+    src: 'config.xml.j2'
+    dest: '{{ radarr_service_data_dir }}/config.xml'
+    owner: '{{ radarr_user }}'
+    group: '{{ radarr_group }}'
+    mode: '0600'
+  notify: 'Handlers | restart radarr'
+
+- name: 'Config | start Radarr'
+  ansible.builtin.service:
+    name: 'radarr'
+    state: 'started'
