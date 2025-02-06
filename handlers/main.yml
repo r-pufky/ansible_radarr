@@ -3,12 +3,8 @@
 # Radarr Handlers
 ###############################################################################
 
-- name: 'reload systemd'
+- name: 'Handlers | restart radarr'
   ansible.builtin.systemd:
-    daemon-reload: true
-
-- name: 'restart radarr'
-  ansible.builtin.systemd:
-    name:    'radarr'
+    name: 'radarr'
     enabled: true
-    state:   'restarted'
+    state: 'restarted'
