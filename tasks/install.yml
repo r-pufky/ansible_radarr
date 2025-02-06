@@ -13,7 +13,6 @@
       - '{{ radarr_role_packages }}'
     apt_package_update_cache: true
 
-# TODO(role): live test github download, may need to be adjusted for Sonarr/Radarr.
 - name: 'Install | Radarr package {{ radarr_service_version }}'
   when: not radarr_service_force_config_only_enable
   ansible.builtin.include_role:
@@ -23,6 +22,9 @@
     github_repo_repo: '{{ radarr_role_github_repo }}'
     github_repo_release: '{{ radarr_service_version }}'
     github_repo_archive_type: '{{ radarr_role_github_repo_archive_type }}'
+    github_binary_enable: true
+    github_binary_specifier: '{{ radarr_role_github_binary_specifier }}'
+    github_binary_url: '{{ radarr_role_github_binary_url }}'
     github_file_owner: '{{ radarr_user }}'
     github_file_group: '{{ radarr_group }}'
     github_extract_dest: '{{ radarr_role_github_extract_dest }}'
