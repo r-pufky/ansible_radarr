@@ -9,7 +9,7 @@
   <SslCertPassword></SslCertPassword>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
-  <ApiKey>b927471037e916e6dac796933c13fdbc</ApiKey>
+  <ApiKey>abcdef1234567890abcdef1234567890</ApiKey>
   <LogLevel>info</LogLevel>
   <LogSizeLimit>1</LogSizeLimit>
   <AnalyticsEnabled>False</AnalyticsEnabled>

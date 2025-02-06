@@ -24,7 +24,7 @@ provisioner:
     group_vars:
       all:
         radarr_media_root_folders: ['/data/media']
-        radarr_config_api_key: 'b927471037e916e6dac796933c13fdbc'
+        radarr_config_api_key: 'abcdef1234567890abcdef1234567890'
         github_testing_enable: true
         github_testing_version: 'v4.0.12.2823'
         github_testing_archive: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'

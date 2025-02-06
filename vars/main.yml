@@ -42,6 +42,8 @@ radarr_role_github_repo: 'Radarr'
 radarr_role_github_repo_archive_type: 'tar.gz'
 radarr_role_github_extract_dest: '/opt/radarr'
 radarr_role_github_extract_symlink_target: '/opt/radarr/radarr'
+radarr_role_github_binary_specifier: 'v'
+radarr_role_github_binary_url: '{VERSION}/Radarr.master.{BARE_VERSION}.linux-core-x64.tar.gz'
 
 ###############################################################################
 # Default Radarr User/Group
