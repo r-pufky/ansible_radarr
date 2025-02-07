@@ -85,7 +85,7 @@
       UpdateScriptPath: '{{ "{{ radarr_service_data_dir }}/update_script" if not radarr_config_update_mechanism | default(true) else "" }}',  # static placement; var determines controller source.
       LaunchBrowser: '{{ radarr_config_launch_browser | default(false) | bool | string | capitalize }}',
       # Settings > UI > Style
-      Theme: '{{ radarr_config_theme | default("auto") }}',
+      Theme: '{{ radarr_config_theme | default("auto") | lower }}',
     }
 
 - name: 'Prep | add config extensions'
