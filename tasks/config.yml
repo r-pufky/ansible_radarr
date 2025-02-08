@@ -117,13 +117,13 @@
 # xmltodict python3 package installed on both controller and node. Just use a
 # template instead.
 - name: 'Config | set Radarr configuration'
+  notify: 'Handlers | restart radarr'
   ansible.builtin.template:
     src: 'config.xml.j2'
     dest: '{{ radarr_service_data_dir }}/config.xml'
     owner: '{{ radarr_user }}'
     group: '{{ radarr_group }}'
     mode: '0600'
-  notify: 'Handlers | restart radarr'
 
 - name: 'Config | start Radarr'
   ansible.builtin.service:
