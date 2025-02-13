@@ -41,7 +41,7 @@ radarr_config_enable_ssl: false
 # HTTPS port. Default: 9898.
 radarr_config_ssl_port: 9898
 
-# Absolute path to PFX certificate.
+# Path to PFX certificate.
 #
 # Sourced from ansible controller; automatically placed in
 # radarr_service_data_dir/radarr.pfx with correct permissions. Radarr will be
