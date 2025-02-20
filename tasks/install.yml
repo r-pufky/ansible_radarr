@@ -4,6 +4,9 @@
 # Radarr Install
 ###############################################################################
 # Install specified version from github release.
+#
+# Args:
+#   _radarr_migrate_metadata: list of str - files and directories to migrate.
 
 - name: 'Install | packages'
   ansible.builtin.include_role:
@@ -29,13 +32,7 @@
     github_file_group: '{{ radarr_group }}'
     github_extract_dest: '{{ radarr_role_github_extract_dest }}'
     github_extract_symlink_target: '{{ radarr_role_github_extract_symlink_target }}'
-    github_extract_migrate_files:
-      - 'radarr.db'
-      - 'radarr.db-shm'  # Radarr never closes DB's correctly.
-      - 'radarr.db-wal'
-      - 'logs.db'
-      - 'logs.db-shm'
-      - 'logs.db-wal'
+    github_extract_migrate_files: '{{ _radarr_migrate_metadata }}'
     github_extract_delete_old_versions: '{{ radarr_service_delete_old_versions_enable }}'
     github_force_overwrite: '{{ radarr_service_force_overwrite }}'
     github_extract_mode: 'a-st,o-rwx'
