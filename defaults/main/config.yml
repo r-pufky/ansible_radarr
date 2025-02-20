@@ -65,13 +65,23 @@ radarr_config_ssl_cert_password: ''
 
 # Authentication method for user access.
 #
+# Special Case:
+#   * New installs REQUIRE 'external' to create a login user; authentication
+#     can be toggled on after the user exists in the database. Suggest running
+#     initial role application temporarily disabling this option:
+#
+#     ansible-playbook radarr.yml -e 'radarr_config_authentication_method=external'
+#
 # Values:
-#       none: force user creation and auth selection WebUI (first run only).
+#   external: force user creation and auth selection WebUI (first run only).
 #             basic or forms must be used after first run.
 #      basic: browser pop-up for credentials.
 #      forms: login page for credentials (use for password managers) (default).
 #
 # Default: 'forms'.
+#
+# Reference:
+# * https://wiki.servarr.com/radarr/faq#help-i-have-locked-myself-out
 radarr_config_authentication_method: 'forms'
 
 # Require authentication for all addresses?
