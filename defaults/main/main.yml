@@ -12,7 +12,7 @@
 #
 # Values:
 #   {VERSION}: tagged release to use ('v5.18.4.9674').
-#    'latest': use latest stable release.
+#      latest: use latest stable release.
 #
 # Default: 'latest'.
 radarr_service_version: 'latest'
