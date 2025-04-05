@@ -27,7 +27,7 @@ provisioner:
         radarr_config_api_key: 'abcdef1234567890abcdef1234567890'
         github_testing_enable: true
         github_testing_versions: ['v4.0.12.2823']
-        github_testing_archives: ['{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz']
+        github_testing_archives: ['{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz']
 platforms:
   - name: 'radarr-debian-12-default'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
@@ -49,7 +49,7 @@ scenario:
     - 'destroy'
     - 'syntax'
     - 'create'
-    # - 'prepare'
+    - 'prepare'
     - 'converge'
     # - 'idempotence'  # Files created, extracted, created, deleted.
     # - 'side_effect'
