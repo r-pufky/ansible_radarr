@@ -10,6 +10,7 @@
     # Radarr will fail if configuration is bad (r_pufky.srv.systemd)
     - name: 'Enable SSL | verify | assert radarr.service active'
       ansible.builtin.assert:
+        quiet: true
         that:
           - '"radarr.service" in ansible_facts.services'
           - 'ansible_facts["services"]["radarr.service"]["state"] == "running"'
@@ -32,6 +33,7 @@
 
     - name: 'Enable SSL | verify | SSL enabled | assert config.xml'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_radarr_config_xml.changed
         fail_msg: >
@@ -50,6 +52,7 @@
 
     - name: 'Enable SSL | verify | SSL enabled | assert /var/lib/radarr/radarr.pfx'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_radarr_pfx.changed
         fail_msg: >
@@ -73,6 +76,7 @@
 
     - name: 'Enable SSL | verify | SSL toggled | assert config.xml'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_radarr_config_xml.changed
         fail_msg: >
@@ -88,6 +92,7 @@
 
     - name: 'Enable SSL | verify | SSL toggled | assert /var/lib/radarr/radarr.pfx'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_radarr_pfx.changed
         fail_msg: '/var/lib/radarr/radarr.pfx should not exist.'

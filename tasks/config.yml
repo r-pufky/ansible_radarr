@@ -32,7 +32,7 @@
             - 'network.target'
         service:
           type: 'simple'
-          exec_start: ['{{ radarr_role_github_extract_symlink_target }}/Radarr -nobrowser -data={{ radarr_service_data_dir }}']
+          exec_start: ['{{ radarr_role_repo_extract_symlink_target }}/Radarr -nobrowser -data={{ radarr_service_data_dir }}']
           timeout_stop_sec: 20
           restart: 'always'  # always restart for periodic service restarts
           runtime_max_sec: '{{ "1d" if radarr_service_restart_daily_enable else "infinity" }}'

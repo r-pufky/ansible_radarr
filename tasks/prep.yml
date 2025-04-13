@@ -90,7 +90,7 @@
       # Settings > UI > Style
       Theme: '{{ radarr_config_theme | default("auto") | lower }}',
     }
-    _radarr_migrate_metadata: '{{ radarr_role_github_extract_migrate_files if not radarr_service_migrate_metadata else radarr_role_github_extract_migrate_files + ["MediaCover"] }}'
+    _radarr_migrate_metadata: '{{ radarr_role_repo_extract_migrate_files if not radarr_service_migrate_metadata else radarr_role_repo_extract_migrate_files + ["MediaCover"] }}'
 
 - name: 'Prep | add config extensions'
   when: radarr_config_extensions | length > 0
