@@ -13,6 +13,7 @@
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # * https://github.com/Radarr/Radarr/releases
+# yamllint enable rule:line-length
 
 # Last time Radarr options were validated against a default configuration.
 radarr_role_validate_date: '2025-02-05'
@@ -40,9 +41,10 @@ radarr_role_packages:
 radarr_role_repo_release_owner: 'Radarr'
 radarr_role_repo_release_repo: 'Radarr'
 radarr_role_repo_extract_dir: '/opt/radarr'
-radarr_role_repo_extract_symlink_target: '/opt/radarr/radarr'
+radarr_role_repo_extract_symlink: '/opt/radarr/radarr'
 radarr_role_repo_release_specifier: 'v'
-radarr_role_repo_release_asset: 'Radarr.master.{BARE_VERSION}.linux-core-x64.tar.gz'
+radarr_role_repo_release_asset:
+  'Radarr.master.{BARE_VERSION}.linux-core-x64.tar.gz'
 radarr_role_repo_extract_migrate_files:
   - 'radarr.db'
   - 'radarr.db-shm'  # Radarr never closes DB's correctly.

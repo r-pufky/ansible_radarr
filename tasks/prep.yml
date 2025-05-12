@@ -16,6 +16,7 @@
 # * https://wiki.servarr.com/radarr
 # * https://github.com/Radarr/Radarr/releases
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+# yamllint enable rule:line-length
 
 - name: 'Prep | assert SSL requirements'
   when: radarr_config_enable_ssl
@@ -72,27 +73,66 @@
       Port: '{{ radarr_config_port | default(7878) }}',
       UrlBase: '{{ radarr_config_url_base | default("") }}',
       InstanceName: '{{ radarr_config_instance_name | default("Radarr") }}',
-      EnableSsl: '{{ radarr_config_enable_ssl | default(false) | bool | string | capitalize }}',
+      EnableSsl: '{{
+          radarr_config_enable_ssl | default(false) |
+          bool | string | capitalize
+        }}',
       SslPort: '{{ radarr_config_ssl_port | default(9898) }}',
-      SslCertPath: '{{ "{{ radarr_service_data_dir }}/radarr.pfx" if radarr_config_enable_ssl | default(false) else "" }}',  # static placement; var determines controller source.
+      SslCertPath: '{{
+          "{{ radarr_service_data_dir }}/radarr.pfx"
+          if radarr_config_enable_ssl | default(false) else
+          ""
+        }}',
       SslCertPassword: '{{ radarr_config_ssl_cert_password | default("") }}',
-      AuthenticationMethod: '{{ radarr_config_authentication_method | default("Forms") | capitalize }}',
-      AuthenticationRequired: '{{ "Enabled" if radarr_config_authentication_required | default(false) else "DisabledForLocalAddresses" }}',
-      ApiKey: '{{ radarr_config_api_key | default(inventory_hostname | md5 | truncate(32, true, "")) }}',
+      AuthenticationMethod: '{{
+          radarr_config_authentication_method | default("Forms") | capitalize
+        }}',
+      AuthenticationRequired: '{{
+          "Enabled"
+          if radarr_config_authentication_required | default(false) else
+          "DisabledForLocalAddresses"
+        }}',
+      ApiKey: '{{
+          radarr_config_api_key |
+          default(inventory_hostname | md5 | truncate(32, true, ""))
+        }}',
       LogLevel: '{{ radarr_config_log_level | default("info") | lower }}',
       LogSizeLimit: '{{ radarr_config_log_size_limit | default(1) }}',
-      AnalyticsEnabled: '{{ radarr_config_analytics_enabled | default(false) | bool | string | capitalize }}',
+      AnalyticsEnabled: '{{
+          radarr_config_analytics_enabled | default(false) |
+          bool | string | capitalize
+        }}',
       Branch: '{{ radarr_config_branch | default("master") | lower }}',
-      UpdateAutomatically: '{{  radarr_config_update_automatically | default(false) | bool | string | capitalize }}',
-      UpdateMechanism: '{{ "BuiltIn" if radarr_config_update_mechanism | default(true) else "Script" }}',
-      UpdateScriptPath: '{{ "{{ radarr_service_data_dir }}/update_script" if not radarr_config_update_mechanism | default(true) else "" }}',  # static placement; var determines controller source.
-      LaunchBrowser: '{{ radarr_config_launch_browser | default(false) | bool | string | capitalize }}',
+      UpdateAutomatically: '{{
+          radarr_config_update_automatically | default(false) |
+          bool | string | capitalize
+        }}',
+      UpdateMechanism: '{{
+          "BuiltIn"
+          if radarr_config_update_mechanism | default(true) else
+          "Script"
+        }}',
+      UpdateScriptPath: '{{
+          "{{ radarr_service_data_dir }}/update_script"
+          if not radarr_config_update_mechanism | default(true) else
+          ""
+        }}',
+      LaunchBrowser: '{{
+          radarr_config_launch_browser | default(false) |
+          bool | string | capitalize
+        }}',
       # Settings > UI > Style
       Theme: '{{ radarr_config_theme | default("auto") | lower }}',
     }
-    _radarr_migrate_metadata: '{{ radarr_role_repo_extract_migrate_files if not radarr_service_migrate_metadata else radarr_role_repo_extract_migrate_files + ["MediaCover"] }}'
+    _radarr_migrate_metadata: '{{
+        radarr_role_repo_extract_migrate_files
+        if not radarr_service_migrate_metadata else
+        radarr_role_repo_extract_migrate_files + ["MediaCover"]
+      }}'
 
 - name: 'Prep | add config extensions'
   when: radarr_config_extensions | length > 0
   ansible.builtin.set_fact:
-    _radarr_config: '{{ _radarr_config | combine(radarr_config_extensions, recursive=true) }}'
+    _radarr_config: '{{
+        _radarr_config | combine(radarr_config_extensions, recursive=true)
+      }}'

@@ -7,7 +7,8 @@
   tasks:
     - name: 'Default | prepare | generate cache location'
       ansible.builtin.set_fact:
-        _test_cache: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
+        _test_cache:
+          '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
     - name: 'Default | prepare | create cache'
       ansible.builtin.file:
@@ -17,14 +18,16 @@
 
     - name: 'Default | prepare | check 5.18.4.9674'
       ansible.builtin.stat:
-        path: '{{ _test_cache }}/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
+        path:
+          '{{ _test_cache }}/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
       register: _test_prepare
 
     - name: 'Default | prepare | cache 5.18.4.9674'
       when: not _test_prepare.stat.exists
       ansible.builtin.get_url:
         url: 'https://github.com/Radarr/Radarr/releases/download/v5.18.4.9674/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
-        dest: '{{ _test_cache }}/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
+        dest:
+          '{{ _test_cache }}/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
         mode: '0640'
       retries: 5
       delay: 5

@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Radarr Install
 ###############################################################################
@@ -29,9 +28,10 @@
     repo_file_owner: '{{ radarr_user }}'
     repo_file_group: '{{ radarr_group }}'
     repo_extract_dir: '{{ radarr_role_repo_extract_dir }}'
-    repo_extract_symlink_target: '{{ radarr_role_repo_extract_symlink_target }}'
+    repo_extract_symlink: '{{ radarr_role_repo_extract_symlink }}'
     repo_extract_migrate_files: '{{ _radarr_migrate_metadata }}'
-    repo_extract_delete_old_versions: '{{ radarr_service_delete_old_versions_enable }}'
+    repo_extract_delete_old_versions:
+      '{{ radarr_service_delete_old_versions_enable }}'
     repo_force_overwrite: '{{ radarr_service_force_overwrite }}'
     repo_extract_mode: 'a-st,o-rwx'
     repo_extract_extra_opts: '--strip-components=1'
