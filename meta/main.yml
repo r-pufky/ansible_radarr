@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: 'radarr'
   author: 'r_pufky'
   description: 'Radarr Server'
   company: 'N/A'

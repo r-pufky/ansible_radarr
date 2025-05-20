@@ -25,7 +25,7 @@
     that:
       - radarr_config_ssl_cert_path | length > 0
     fail_msg: >
-      radarr_config_enable_ssl=true requires
+      ✘ radarr_config_enable_ssl=true requires
       radarr_config_ssl_cert_path set.
 
 - name: 'Prep | assert update script requirements'
@@ -35,13 +35,13 @@
     that:
       - radarr_config_update_script_path | length > 0
     fail_msg: >
-      radarr_config_update_script_path must be set when
+      ✘ radarr_config_update_script_path must be set when
       radarr_config_update_mechanism=False.
 
 - name: 'Prep | manage users'
   when: radarr_create_user
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.users'
+    name: 'r_pufky.deb.users'
     tasks_from: 'role_account_add.yml'
   vars:
     users_role_group: '{{ radarr_role_group }}'
