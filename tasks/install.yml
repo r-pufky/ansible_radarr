@@ -3,9 +3,6 @@
 # Radarr Install
 ###############################################################################
 # Install specified version from github release.
-#
-# Args:
-#   _radarr_migrate_metadata: list of str - files and directories to migrate.
 
 - name: 'Install | packages'
   ansible.builtin.include_role:
@@ -15,23 +12,23 @@
       - '{{ radarr_role_packages }}'
     apt_package_update_cache: true
 
-- name: 'Install | Radarr package {{ radarr_service_version }}'
-  when: not radarr_service_force_config_only_enable
+- name: 'Install | Radarr package {{ _radarr_srv_version.raw }}'
+  when: not _radarr_srv_force_config_only_enable.raw
   ansible.builtin.include_role:
     name: 'r_pufky.deb.repo'
   vars:
     repo_release_owner: '{{ radarr_role_repo_release_owner }}'
     repo_release_repo: '{{ radarr_role_repo_release_repo }}'
-    repo_release_tag: '{{ radarr_service_version }}'
+    repo_release_tag: '{{ _radarr_srv_version.raw }}'
     repo_release_specifier: '{{ radarr_role_repo_release_specifier }}'
     repo_release_asset: '{{ radarr_role_repo_release_asset }}'
-    repo_file_owner: '{{ radarr_user }}'
-    repo_file_group: '{{ radarr_group }}'
+    repo_file_owner: '{{ _radarr_srv_user.parsed }}'
+    repo_file_group: '{{ _radarr_srv_group.parsed }}'
     repo_extract_dir: '{{ radarr_role_repo_extract_dir }}'
     repo_extract_symlink: '{{ radarr_role_repo_extract_symlink }}'
-    repo_extract_migrate_files: '{{ _radarr_migrate_metadata }}'
+    repo_extract_migrate_files: '{{ _radarr_srv_migrate_metadata.role }}'
     repo_extract_delete_old_versions:
-      '{{ radarr_service_delete_old_versions_enable }}'
-    repo_force_overwrite: '{{ radarr_service_force_overwrite }}'
+      '{{ _radarr_srv_delete_old_versions_enable.raw }}'
+    repo_force_overwrite: '{{ _radarr_srv_force_overwrite.raw }}'
     repo_extract_mode: 'a-st,o-rwx'
     repo_extract_extra_opts: '--strip-components=1'

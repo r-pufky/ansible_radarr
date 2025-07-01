@@ -37,7 +37,7 @@ provisioner:
     group_vars:
       all:
         radarr_media_root_folders: ['/data/media']
-        radarr_config_api_key: 'abcdef1234567890abcdef1234567890'
+        radarr_cfg_api_key: 'abcdef1234567890abcdef1234567890'
         radarr_live_api_enable: false
 platforms:
   - name: 'radarr-debian-12-live_api_test'

@@ -29,10 +29,10 @@ permissions will be set to ensure Radarr can read files.
   roles:
      - 'r_pufky.radarr'
   vars:
-    radarr_service_version: 'latest'
-    radarr_config_api_key: '{{ vault_radarr_api_key }}'
-    radarr_config_update_automatically: true
-    radarr_config_theme: 'dark'
+    radarr_srv_version: 'latest'
+    radarr_cfg_api_key: '{{ vault_radarr_api_key }}'
+    radarr_cfg_update_automatically: true
+    radarr_cfg_theme: 'dark'
     radarr_media_root_folders:
       - '/data/media'
     radarr_media_set_perms_file_enable: true
@@ -44,7 +44,7 @@ toggled on after the user exists in the database . Suggest running initial role
 application temporarily disabling this option:
 
 ``` bash
-ansible-playbook radarr.yml -e 'radarr_config_authentication_method=external'
+ansible-playbook radarr.yml -e 'radarr_cfg_authentication_method=external'
 ```
 
 ## Development

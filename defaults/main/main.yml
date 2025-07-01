@@ -1,31 +1,41 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Radarr Service Configuration
 ###############################################################################
 # Existing databases are migrated automatically when new versions are
-# installed.
-
-# Version.
+# installed. Migration between database platforms is not supported and must be
+# done manually.
 #
-# Older versions (<5) are not supported. Set repo_host_access_token if github
-# API is rate limited. See r_pufky.deb.repo.
+# Set repo_host_access_token if API is rate limited. See r_pufky.deb.repo.
+
+# Radarr Release.
+#
+# Versions (Schematic):
+#       MAJOR: Unsafe - requires major role changes; only default MAJOR version
+#              is supported. See other branches if they exist.
+#       MINOR: Safe - Usually requires no role updates. Changes usually
+#              constrained to internal changes requiring no config file or
+#              dependency changes.
+#       PATCH: Safe - Usually requires no role updates.
+#   RECOMMEND: Only increment PATCH. Never use 'latest'.
 #
 # Values:
-#   {VERSION}: Tagged release to use ('v5.18.4.9674').
+#   {VERSION}: Tagged release to use ('v5.26.2.10099').
 #      latest: Use latest stable release.
 #
-# Default: 'latest'.
-radarr_service_version: 'latest'
+# Default: 'v5.26.2.10099'.
+radarr_srv_version: 'v5.26.2.10099'
 
 # Remove old installs on upgrade success? Default: True.
-radarr_service_delete_old_versions_enable: true
+radarr_srv_delete_old_versions_enable: true
 
-# Absolute path to database and metadata location. Default: '/var/lib/radarr'.
-radarr_service_data_dir: '/var/lib/radarr'
+# Absolute path to database and metadata location.
+#
+# Default: '/data/radarr/config'.
+radarr_srv_config_dir: '/data/radarr/config'
 
 # Service Umask. Default: '0002'.
-radarr_service_u_mask: '0002'
+radarr_srv_u_mask: '0002'
 
 # Force overwrite existing install?
 #
@@ -35,7 +45,7 @@ radarr_service_u_mask: '0002'
 # directories (if any). Any user data in these directories are DESTROYED.
 #
 # Default: False.
-radarr_service_force_overwrite: false
+radarr_srv_force_overwrite: false
 
 # Migrate metadata (MediaCover) directory?
 #
@@ -43,7 +53,7 @@ radarr_service_force_overwrite: false
 # version if not migrated with databases.
 #
 # Default: True.
-radarr_service_migrate_metadata: true
+radarr_srv_migrate_metadata: true
 
 # Recursively set metadata permissions?
 #
@@ -51,7 +61,7 @@ radarr_service_migrate_metadata: true
 # slow.
 #
 # Default: False.
-radarr_service_permissions_recursive_enable: false
+radarr_srv_permissions_recursive_enable: false
 
 # Automatically restart Radarr daily?
 #
@@ -59,7 +69,7 @@ radarr_service_permissions_recursive_enable: false
 # updates.
 #
 # Default: True.
-radarr_service_restart_daily_enable: true
+radarr_srv_restart_daily_enable: true
 
 # Only apply configuration?
 #
@@ -71,10 +81,12 @@ radarr_service_restart_daily_enable: true
 # Useful when adding a change without reconfiguring the whole system or
 # checking and installing a new version. Suggest applying with extra options:
 #
-#   ansible-playbook site.yml --tags Radarr -e 'radarr_service_force_config_only_enable=true'
+#   ansible-playbook site.yml
+#       --tags Radarr
+#       -e 'radarr_srv_force_config_only_enable=true'
 #
 # Default: False.
-radarr_service_force_config_only_enable: false
+radarr_srv_force_config_only_enable: false
 
 ###############################################################################
 # Radarr User
@@ -85,16 +97,16 @@ radarr_service_force_config_only_enable: false
 # Enable radarr_create_user if this account is not externally managed.
 #
 # Default: 'media'.
-radarr_user: 'media'
+radarr_srv_user: 'media'
 
 # Group that Radarr will run under.
 #
 # Enable radarr_create_user if this group is not externally managed.
 #
 # Default: 'media'.
-radarr_group: 'media'
+radarr_srv_group: 'media'
 
-# Create radarr_user, radarr_group if not detected?
+# Create radarr_srv_user, radarr_srv_group if not detected?
 #
 # Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
 #
@@ -107,17 +119,31 @@ radarr_create_user: true
 
 # Root media storage folders.
 #
-# Folders will be created/set with radarr_user, radarr_group,
+# Folders will be created/set with radarr_srv_user, radarr_srv_group,
 # radarr_media_perms_folder.
 #
 # Default: [].
 radarr_media_root_folders: []
 
+# Enable user management of data/media files?
+#
+# Use radarr_srv_user to execute data/media management commands. Role
+# applies media permissions using 'root' by default. For mounted data locations
+# (NFS with squashed mounts, mapped container mounts, etc) the local root user
+# will not have sufficient privileges to modify these files.
+#
+# Applies to:
+# * radarr_srv_config_dir
+# * radarr_srv_media_root_folders
+#
+# Default: False.
+radarr_srv_user_data_manage_enable: false
+
 # Media folder permissions octal.
 #
 # Media folders specified by radarr_media_root_folders will always be
-# recursively set using radarr_media_perms_folder, radarr_user, and
-# radarr_group.
+# recursively set using radarr_media_perms_folder, radarr_srv_user, and
+# radarr_srv_group.
 #
 # Default: '0755'.
 radarr_media_perms_folder: '0755'
@@ -125,13 +151,15 @@ radarr_media_perms_folder: '0755'
 # Enable setting of media file permissions?
 #
 # Set file permissions within radarr_media_root_folders using
-# radarr_media_perms_file, radarr_user, and radarr_group. Large sets of files
-# may be slow to set permissions.
+# radarr_media_perms_file, radarr_srv_user, and radarr_srv_group. Large sets of
+# files may be slow to set permissions.
 #
 # Useful when first configuring to ensure service has access to all specified
 # media locations. Suggest applying with extra options:
 #
-#   ansible-playbook site.yml --tags Radarr -e 'radarr_media_set_perms_file_enable=true'
+#   ansible-playbook site.yml
+#       --tags Radarr
+#       -e 'radarr_media_set_perms_file_enable=true'
 #
 # Default: False.
 radarr_media_set_perms_file_enable: false

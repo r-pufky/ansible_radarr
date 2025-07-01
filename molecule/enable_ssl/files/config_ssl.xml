@@ -5,7 +5,7 @@
   <InstanceName>Radarr</InstanceName>
   <EnableSsl>True</EnableSsl>
   <SslPort>9898</SslPort>
-  <SslCertPath>/var/lib/radarr/radarr.pfx</SslCertPath>
+  <SslCertPath>/data/radarr/config/radarr.pfx</SslCertPath>
   <SslCertPassword>test</SslCertPassword>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>

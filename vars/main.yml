@@ -10,15 +10,28 @@
 #
 # Radarr uses the generic Servarr installation scripts.
 #
+# Updates:
+# * New MAJOR, MINOR releases should hard branch at version before starting
+#   (e.g. 2.14.x branch).
+# * Keep a separate change log as changes are made, you will not remember all
+#   of them.
+# * Use bare-metal docs to validate package/process changes.
+# * Update role defaults (includes updating defaults, tasks):
+#   * Use configuration docs to add new variables.
+#   * Use defaults/ to remove any changed/deprecated variables.
+# * Update tests for any changes.
+# * Standard role validation testing (yamllint, ansible-lint, todo, noqa).
+# * Tag with MAJOR.MINOR version, with PATCH representing role change.
+#
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # * https://github.com/Radarr/Radarr/releases
 # yamllint enable rule:line-length
 
 # Last time Radarr options were validated against a default configuration.
-radarr_role_validate_date: '2025-02-05'
+radarr_role_validate_date: '2025-07-01'
 radarr_role_validate_release: 'bookworm'
-radarr_role_validate_version: 'v5.18.4.9674'
+radarr_role_validate_version: 'v5.26.2.10099'
 radarr_role_validate_script_release: '3.0.12'
 radarr_role_validate_script_date: '2024-04-09'
 

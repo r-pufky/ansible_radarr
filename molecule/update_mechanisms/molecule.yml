@@ -1,12 +1,11 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Update Mechanisms
 ###############################################################################
 # Verify update scripts are deployed and executed correctly.
 #
 # Tests:
-# * /var/lib/radarr/update_script exists.
+# * /data/radarr/config/update_script exists.
 # * toggling script update on, then off removes update_script.
 
 dependency:
@@ -24,18 +23,26 @@ provisioner:
   inventory:
     group_vars:
       all:
-        radarr_config_update_mechanism: false
-        radarr_config_update_script_path: 'files/update.sh'
-        radarr_media_root_folders: ['/data/media']
-        radarr_config_api_key: 'abcdef1234567890abcdef1234567890'
+        radarr_cfg_update_mechanism: false
+        radarr_cfg_update_script_path: 'files/update.sh'
+        radarr_srv_media_root_folders: ['/data/media']
+        radarr_cfg_api_key: 'abcdef1234567890abcdef1234567890'
         repo_testing_enable: true
         repo_testing_versions:
           - comment: 'default'
-            version: 'v5.18.4.9674'
-            asset: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
+            version: 'v5.26.2.10099'
+            asset: '{{
+                lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
+                "/molecule/cache/" ~
+                "Radarr.master.5.26.2.10099.linux-core-x64.tar.gz"
+              }}'
           - comment: 'toggle'
-            version: 'v5.18.4.9674'
-            asset: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Radarr.master.5.18.4.9674.linux-core-x64.tar.gz'
+            version: 'v5.26.2.10099'
+            asset: '{{
+                lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
+                "/molecule/cache/" ~
+                "Radarr.master.5.26.2.10099.linux-core-x64.tar.gz"
+              }}'
 platforms:
   - name: 'radarr-debian-12-update_mechanisms'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
