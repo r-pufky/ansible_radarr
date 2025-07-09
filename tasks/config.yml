@@ -128,7 +128,7 @@
               -nobrowser
               -data={{ _radarr_srv_config_dir.raw }}
           timeout_stop_sec: 20
-          restart: 'always'  # always restart for periodic service restarts
+          restart: 'always'  # Always restart for periodic service restarts.
           runtime_max_sec: '{{
               "1d"
               if _radarr_srv_restart_daily_enable.raw else

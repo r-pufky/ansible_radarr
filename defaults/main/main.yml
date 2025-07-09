@@ -94,14 +94,14 @@ radarr_srv_force_config_only_enable: false
 
 # User that Radarr will run under.
 #
-# Enable radarr_create_user if this account is not externally managed.
+# Enable radarr_srv_create_user if this account is not externally managed.
 #
 # Default: 'media'.
 radarr_srv_user: 'media'
 
 # Group that Radarr will run under.
 #
-# Enable radarr_create_user if this group is not externally managed.
+# Enable radarr_srv_create_user if this group is not externally managed.
 #
 # Default: 'media'.
 radarr_srv_group: 'media'
@@ -111,7 +111,7 @@ radarr_srv_group: 'media'
 # Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
 #
 # Default: True.
-radarr_create_user: true
+radarr_srv_create_user: true
 
 ###############################################################################
 # Media Permissions
