@@ -78,7 +78,7 @@ radarr_srv_restart_daily_enable: true
 # Only apply configuration?
 #
 # Reduces role application time by ONLY applying configuration changes. Does
-# NOT affect radarr_media_set_perms_file_enable.
+# NOT affect radarr_srv_media_set_perms_file_enable.
 #
 # This should ONLY be used after the role has been fully run once.
 #
@@ -146,27 +146,27 @@ radarr_srv_user_data_manage_enable: false
 # Media folder permissions octal.
 #
 # Media folders specified by radarr_media_root_folders will always be
-# recursively set using radarr_media_perms_folder, radarr_srv_user, and
+# recursively set using radarr_srv_media_perms_folder, radarr_srv_user, and
 # radarr_srv_group.
 #
 # Default: '0755'.
-radarr_media_perms_folder: '0755'
+radarr_srv_media_perms_folder: '0755'
 
 # Enable setting of media file permissions?
 #
 # Set file permissions within radarr_media_root_folders using
-# radarr_media_perms_file, radarr_srv_user, and radarr_srv_group. Large sets of
-# files may be slow to set permissions.
+# radarr_srv_media_perms_file, radarr_srv_user, and radarr_srv_group. Large
+# sets of files may be slow to set permissions.
 #
 # Useful when first configuring to ensure service has access to all specified
 # media locations. Suggest applying with extra options:
 #
 #   ansible-playbook site.yml
 #       --tags Radarr
-#       -e 'radarr_media_set_perms_file_enable=true'
+#       -e 'radarr_srv_media_set_perms_file_enable=true'
 #
 # Default: False.
-radarr_media_set_perms_file_enable: false
+radarr_srv_media_set_perms_file_enable: false
 
 # Media file permissions octal. Default: '0644'.
-radarr_media_perms_file: '0644'
+radarr_srv_media_perms_file: '0644'

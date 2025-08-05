@@ -33,9 +33,9 @@ permissions will be set to ensure Radarr can read files.
     radarr_cfg_api_key: '{{ vault_radarr_api_key }}'
     radarr_cfg_update_automatically: true
     radarr_cfg_theme: 'dark'
-    radarr_media_root_folders:
+    radarr_srv_media_root_folders:
       - '/data/media'
-    radarr_media_set_perms_file_enable: true
+    radarr_srv_media_set_perms_file_enable: true
 ```
 
 ### Initial Deployment with No User
