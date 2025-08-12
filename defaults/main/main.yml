@@ -127,7 +127,7 @@ radarr_srv_create_user: true
 # radarr_media_perms_folder.
 #
 # Default: [].
-radarr_media_root_folders: []
+radarr_srv_media_root_folders: []
 
 # Enable user management of data/media files?
 #
