@@ -493,6 +493,96 @@
       deprecated: false,
       order: 19,
     }
+    _radarr_cfg_database_type: {
+      section: 'database',
+      key: '',
+      raw: '{{ radarr_cfg_database_type | lower }}',
+      default: 'sqlite',
+      role_unset: true,  # Never set in config.xml.
+      hint: 'str',
+      added: '4.1.0',
+      sensitive: false,
+      deprecated: false,
+      order: 1,
+    }
+    _radarr_cfg_database_host: {
+      section: 'database',
+      key: 'PostgresHost',
+      raw: '{{ radarr_cfg_database_host }}',
+      default: 'localhost',
+      role_unset:
+        '{{ true if radarr_cfg_database_type == "sqlite" else false }}',
+      hint: 'str',
+      added: '4.1.0',
+      sensitive: false,
+      deprecated: false,
+      order: 2,
+    }
+    _radarr_cfg_database_port: {
+      section: 'database',
+      key: 'PostgresPort',
+      raw: '{{ radarr_cfg_database_port }}',
+      default: 5432,
+      role_unset:
+        '{{ true if radarr_cfg_database_type == "sqlite" else false }}',
+      hint: 'int',
+      added: '4.1.0',
+      sensitive: false,
+      deprecated: false,
+      order: 3,
+    }
+    _radarr_cfg_database_user: {
+      section: 'database',
+      key: 'PostgresUser',
+      raw: '{{ radarr_cfg_database_user }}',
+      default: 'radarr',
+      role_unset:
+        '{{ true if radarr_cfg_database_type == "sqlite" else false }}',
+      hint: 'str',
+      added: '4.1.0',
+      sensitive: false,
+      deprecated: false,
+      order: 4,
+    }
+    _radarr_cfg_database_password: {
+      section: 'database',
+      key: 'PostgresPassword',
+      raw: '{{ radarr_cfg_database_password }}',
+      default: '',
+      role_unset:
+        '{{ true if radarr_cfg_database_type == "sqlite" else false }}',
+      hint: 'str',
+      added: '4.1.0',
+      sensitive: true,
+      deprecated: false,
+      order: 5,
+    }
+    _radarr_cfg_database_main: {
+      section: 'database',
+      key: 'PostgresMainDb',
+      raw: '{{ radarr_cfg_database_main }}',
+      default: 'radarr-main',
+      role_unset:
+        '{{ true if radarr_cfg_database_type == "sqlite" else false }}',
+      hint: 'str',
+      added: '4.1.0',
+      sensitive: false,
+      deprecated: false,
+      order: 6,
+    }
+    _radarr_cfg_database_log: {
+      section: 'database',
+      key: 'PostgresLogDb',
+      raw: '{{ radarr_cfg_database_log }}',
+      default: 'radarr-log',
+      role_unset:
+        '{{ true if radarr_cfg_database_type == "sqlite" else false }}',
+      hint: 'str',
+      added: '4.1.0',
+      sensitive: false,
+      deprecated: false,
+      order: 7,
+    }
     _radarr_cfg_theme: {
       section: 'UI',
       key: 'Theme',
@@ -513,4 +603,5 @@
       }}'
     _radarr_order:
       - 'General'
+      - 'database'
       - 'UI'

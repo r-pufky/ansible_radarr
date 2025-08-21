@@ -47,6 +47,13 @@ application temporarily disabling this option:
 ansible-playbook radarr.yml -e 'radarr_cfg_authentication_method=external'
 ```
 
+### Postgres Support
+Postgres is supported in the role, however, sqlite3 to postgres migrations must
+be done manually. See defaults and Radarr documentation.
+
+[defaults/database.yml](https://github.com/r-pufky/ansible_radarr/blob/main/defaults/main/database.yml)
+[Radarr Postgres](https://wiki.servarr.com/radarr/postgres-setup)
+
 ## Development
 Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
 
