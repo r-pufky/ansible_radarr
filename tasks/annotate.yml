@@ -46,23 +46,6 @@
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # yamllint enable rule:line-length
 
-# TODO(2.12.4+): Remove variable renaming check on next major Radarr release.
-- name: 'Annotate | check deprecated variable usage'
-  when: >
-    hostvars[inventory_hostname] | dict2items |
-    selectattr("key", "match", "radarr_config_*") | length > 0 or
-    hostvars[inventory_hostname] | dict2items |
-    selectattr("key", "match", "radarr_service_*") | length > 0
-  ansible.builtin.fail:
-    msg: |
-      ✘ Role variables have migrated. Read defaults and update.
-
-      radarr_config_* -> radarr_cfg_*
-      radarr_service_* -> radarr_srv_*
-      radarr_* -> radarr_srv_*
-
-      DB files MUST be manually migrated if radarr_srv_config_dir changed.
-
 - name: 'Annotate | sanitize & annotate service defaults'
   ansible.builtin.set_fact:
     _radarr_srv_version: {

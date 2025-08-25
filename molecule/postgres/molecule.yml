@@ -46,18 +46,18 @@ provisioner:
         radarr_cfg_database_host: 'localhost'
         radarr_cfg_database_password: 'test'
     host_vars:
-      radarr-debian-12-postgres_user_data:
+      radarr-debian-13-postgres_user_data:
         radarr_srv_user_data_manage_enable: true
 platforms:
-  - name: 'radarr-debian-12-postgres'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'radarr-debian-13-postgres'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'radarr-debian-12-postgres_user_data'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'radarr-debian-13-postgres_user_data'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

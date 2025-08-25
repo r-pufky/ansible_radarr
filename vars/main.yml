@@ -29,8 +29,8 @@
 # yamllint enable rule:line-length
 
 # Last time Radarr options were validated against a default configuration.
-radarr_role_validate_date: '2025-07-01'
-radarr_role_validate_release: 'bookworm'
+radarr_role_validate_date: '2025-08-24'
+radarr_role_validate_release: 'trixie'
 radarr_role_validate_version: 'v5.26.2.10099'
 radarr_role_validate_script_release: '3.0.12'
 radarr_role_validate_script_date: '2024-04-09'
@@ -43,7 +43,7 @@ radarr_role_packages:
   - 'sqlite3'  # Radarr DB.
   - 'gnupg2'  # GPG for certificates.
   - 'ca-certificates'  # up to date certificates for certificate validation.
-  - 'libicu72'  # International Unicode support for .NET.
+  - 'libicu76'  # International Unicode support for .NET.
 
 ###############################################################################
 # Radarr GitHub Options

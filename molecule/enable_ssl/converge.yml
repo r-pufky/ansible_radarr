@@ -8,7 +8,7 @@
         name: 'r_pufky.srv.radarr'
 
 - name: 'Converge | toggle SSL'
-  hosts: 'radarr-debian-12-enable_ssl-toggle'
+  hosts: 'radarr-debian-13-enable_ssl-toggle'
   gather_facts: false
   tasks:
     - name: 'Converge | toggle SSL | apply r_pufky.srv.radarr'
