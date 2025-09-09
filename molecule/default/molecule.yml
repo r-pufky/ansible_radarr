@@ -34,11 +34,11 @@ provisioner:
         repo_testing_enable: true
         repo_testing_versions:
           - comment: 'default'
-            version: 'v5.26.2.10099'
+            version: 'v5.27.5.10198'
             asset: '{{
                 lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
                 "/molecule/cache/" ~
-                "Radarr.master.5.26.2.10099.linux-core-x64.tar.gz"
+                "Radarr.master.5.27.5.10198.linux-core-x64.tar.gz"
               }}'
     host_vars:
       radarr-debian-13-user_data:
