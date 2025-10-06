@@ -81,11 +81,11 @@
   ansible.builtin.set_fact:
     _radarr_srv_user: '{{
         _radarr_srv_user |
-        combine({"role_uid": _radarr_srv_user_query.uid})
+        combine({"_uid": _radarr_srv_user_query.uid})
       }}'
     _radarr_srv_group: '{{
         _radarr_srv_group |
-        combine({"role_gid": _radarr_srv_user_query.group})
+        combine({"_gid": _radarr_srv_user_query.group})
       }}'
 
 - name: 'Prep | stop services'
