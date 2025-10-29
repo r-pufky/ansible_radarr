@@ -87,7 +87,7 @@ radarr_srv_restart_daily_enable: true
 #
 #   ansible-playbook site.yml
 #       --tags Radarr
-#       -e 'radarr_srv_force_config_only_enable=true'
+#       -e '{"radarr_srv_force_config_only_enable": true}'
 #
 # Default: False.
 radarr_srv_force_config_only_enable: false
@@ -163,7 +163,7 @@ radarr_srv_media_perms_folder: '0755'
 #
 #   ansible-playbook site.yml
 #       --tags Radarr
-#       -e 'radarr_srv_media_set_perms_file_enable=true'
+#       -e '{"radarr_srv_media_set_perms_file_enable": true}'
 #
 # Default: False.
 radarr_srv_media_set_perms_file_enable: false
