@@ -11,16 +11,22 @@
       vars:
         test_name: 'Prepare | create cache'
 
-    - name: 'Prepare | check 5.28.0.10274'
+    - name: 'Prepare | parse test version'
+      ansible.builtin.set_fact:
+        test_version: '5.28.0.10274'
+
+    - name: '{{ "Prepare | cache " ~ test_version }}'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'cache_url.yml'
       vars:
-        test_name: 'Prepare | cache 5.28.0.10274'
-        test_dest: 'Radarr.master.5.28.0.10274.linux-core-x64.tar.gz'
+        test_name: '{{ "Prepare | cache " ~ test_version }}'
+        test_dest: '{{
+            "Radarr.master." ~ test_version ~ ".linux-core-x64.tar.gz"
+          }}'
         test_url: '{{
             "https://github.com/Radarr/Radarr/releases/download/" ~
-            "v5.28.0.10274/" ~
-            "Radarr.master.5.28.0.10274.linux-core-x64.tar.gz"
+            "v" ~ test_version ~ "/" ~
+            "Radarr.master." ~ test_version ~ ".linux-core-x64.tar.gz"
           }}'
         test_mode: '0640'

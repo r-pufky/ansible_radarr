@@ -23,24 +23,30 @@
         _test_cache:
           '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
-    - name: 'Enable SSL| prepare | create cache'
+    - name: 'Prepare | create cache'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'create_cache.yml'
       vars:
-        test_name: 'Enable SSL| prepare | create cache'
+        test_name: 'Prepare | create cache'
 
-    - name: 'Enable SSL| prepare | check 5.28.0.10274'
+    - name: 'Prepare | parse test version'
+      ansible.builtin.set_fact:
+        test_version: '5.28.0.10274'
+
+    - name: '{{ "Prepare | cache " ~ test_version }}'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'cache_url.yml'
       vars:
-        test_name: 'Enable SSL| prepare | cache 5.28.0.10274'
-        test_dest: 'Radarr.master.5.28.0.10274.linux-core-x64.tar.gz'
+        test_name: '{{ "Prepare | cache " ~ test_version }}'
+        test_dest: '{{
+            "Radarr.master." ~ test_version ~ ".linux-core-x64.tar.gz"
+          }}'
         test_url: '{{
             "https://github.com/Radarr/Radarr/releases/download/" ~
-            "v5.28.0.10274/" ~
-            "Radarr.master.5.28.0.10274.linux-core-x64.tar.gz"
+            "v" ~ test_version ~ "/" ~
+            "Radarr.master." ~ test_version ~ ".linux-core-x64.tar.gz"
           }}'
         test_mode: '0640'
 

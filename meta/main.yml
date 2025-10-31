@@ -16,5 +16,6 @@ galaxy_info:
     - 'radarr'
     - 'media'
     - 'movies'
+    - 'arr'
 
 dependencies: []
