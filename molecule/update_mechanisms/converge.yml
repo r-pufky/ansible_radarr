@@ -3,16 +3,16 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Converge | apply r_pufky.srv.radarr'
+    - name: 'Converge | apply r_pufky.arr.radarr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.radarr'
+        name: 'r_pufky.arr.radarr'
 
 - name: 'Converge | toggle updates'
   hosts: 'radarr-debian-13-update_mechanisms-toggle'
   gather_facts: false
   tasks:
-    - name: 'Converge | toggle updates | apply r_pufky.srv.radarr'
+    - name: 'Converge | toggle updates | apply r_pufky.arr.radarr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.radarr'
+        name: 'r_pufky.arr.radarr'
       vars:
         radarr_cfg_update_mechanism: true

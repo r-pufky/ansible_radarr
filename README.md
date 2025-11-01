@@ -14,7 +14,7 @@ All ports and protocols have been defined for the role.
 
 ## Dependencies
 **galaxy-ng** roles cannot be used independently. Part of
-[r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv) collection.
+[r_pufky.arr](https://github.com/r-pufky/ansible_collection_ar) collection.
 
 ## Example Playbook
 Read defaults documentation.
@@ -27,7 +27,7 @@ permissions will be set to ensure Radarr can read files.
   hosts: 'radarr.example.com'
   become: true
   roles:
-     - 'r_pufky.radarr'
+     - 'r_pufky.arr.radarr'
   vars:
     radarr_srv_version: 'latest'
     radarr_cfg_api_key: '{{ vault_radarr_api_key }}'
@@ -52,6 +52,7 @@ Postgres is supported in the role, however, sqlite3 to postgres migrations must
 be done manually. See defaults and Radarr documentation.
 
 [defaults/database.yml](https://github.com/r-pufky/ansible_radarr/blob/main/defaults/main/database.yml)
+
 [Radarr Postgres](https://wiki.servarr.com/radarr/postgres-setup)
 
 ## Development
@@ -68,9 +69,9 @@ Release format: **{OS}-{SERVICE}-{ROLE}**
 Each type inherits the versioning system used; defaulting to schematic
 versioning.
 
-`12.0.0-2.0.3-1.0.0`
+`12-2.0.3-1.0.0`
 
-* 12.0.0 - Debian 12 (bookworm).
+* 12 - Debian 12 (bookworm).
 * 2.0.3 - Service/app version.
 * 1.0.0 - Role version.
 
