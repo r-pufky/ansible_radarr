@@ -30,18 +30,18 @@ provisioner:
         repo_testing_enable: true
         repo_testing_versions:
           - comment: 'default'
-            version: 'v5.28.0.10274'
+            version: 'v6.0.4.10291'
             asset: '{{
                 lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
                 "/molecule/cache/" ~
-                "Radarr.master.5.28.0.10274.linux-core-x64.tar.gz"
+                "Radarr.master.6.0.4.10291.linux-core-x64.tar.gz"
               }}'
           - comment: 'toggle'
-            version: 'v5.28.0.10274'
+            version: 'v6.0.4.10291'
             asset: '{{
                 lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
                 "/molecule/cache/" ~
-                "Radarr.master.5.28.0.10274.linux-core-x64.tar.gz"
+                "Radarr.master.6.0.4.10291.linux-core-x64.tar.gz"
               }}'
 platforms:
   - name: 'radarr-debian-13-update_mechanisms'

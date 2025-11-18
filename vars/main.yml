@@ -24,7 +24,7 @@
 # Last time Radarr options were validated against a default configuration.
 radarr_role_validate_date: '2025-10-07'
 radarr_role_validate_release: 'trixie'
-radarr_role_validate_version: 'v5.28.0.10274'
+radarr_role_validate_version: 'v6.0.4.10291'
 radarr_role_validate_script_release: '3.0.12'
 radarr_role_validate_script_date: '2024-04-09'
 

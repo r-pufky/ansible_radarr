@@ -24,11 +24,11 @@
 #   RECOMMEND: Only increment PATCH. Never use 'latest'.
 #
 # Values:
-#   {VERSION}: Tagged release to use ('v5.28.0.10274').
+#   {VERSION}: Tagged release to use ('v6.0.4.10291').
 #      latest: Use latest stable release.
 #
-# Default: 'v5.28.0.10274'.
-radarr_srv_version: 'v5.28.0.10274'
+# Default: 'v6.0.4.10291'.
+radarr_srv_version: 'v6.0.4.10291'
 
 # Remove old installs on upgrade success? Default: True.
 radarr_srv_delete_old_versions_enable: true
