@@ -18,6 +18,8 @@ All ports and protocols have been defined for the role.
 
 ## Example Playbook
 Read defaults documentation.
+[Additional documentation](http://r-pufky.github.io/r-pufky/docs/arr/radarr).
+
 
 Install latest release of Radarr; ensuring media files have proper permissions.
 Version (and databases) will be migrated and updated on new releases. Media
