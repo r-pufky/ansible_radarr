@@ -1,97 +1,131 @@
 ---
 ###############################################################################
-# Radarr Prep
+#  Pre Execution Tasks
 ###############################################################################
+# Only use data annotations in role after merging role, defaults, runtime data.
+# Service may not exist if first install.
+#
 # *arr services use the same codebase; any bugs or fixes should be checked for
 # all related services.
 
-- name: 'Prep | assert database requirements'
-  when: _radarr_cfg_database_type.raw == 'postgres'
+- name: 'Prep | fact | record start time'
+  ansible.builtin.set_fact:
+    radarr__srv: "{{ radarr___release | r_pufky.data.v3(
+
+        _start=now(utc=True, fmt='%Y-%m-%dT%H%M%S'),
+        _user=radarr_srv_user,
+        _group=radarr_srv_group,
+      ) }}"
+    radarr__cfg: "{{ radarr___app | r_pufky.data.v3(
+
+        _version=radarr_srv_version,
+        _package=(
+          'Radarr.master.' ~ radarr_srv_version[1:] ~ '.linux-core-x64.tar.gz'
+        ),
+        _app='/opt/radarr/src/' ~ radarr_srv_version,
+        _url=(
+          radarr___repo_url ~ radarr_srv_version ~ '/' ~
+          'Radarr.master.' ~ radarr_srv_version[1:] ~ '.linux-core-x64.tar.gz'
+        ),
+        _dir=radarr_cfg_dir | regex_replace('\\/$', ''),
+        _backup_dir=radarr_cfg_backup_dir | regex_replace('\\/$', ''),
+        _backup_metadata=radarr_cfg_backup_metadata,
+      ) }}"
+
+- name: 'Prep | assert | backup enabled and location defined'
+  when: radarr_flg_backup
   ansible.builtin.assert:
     quiet: true
     that:
-      - _radarr_cfg_database_host.raw | length > 0
-      - _radarr_cfg_database_port.raw > 0
-      - _radarr_cfg_database_user.raw | length > 0
-      - _radarr_cfg_database_password.raw | length > 0
-      - _radarr_cfg_database_main.raw | length > 0
-      - _radarr_cfg_database_log.raw | length > 0
+      - radarr__cfg._backup_dir | length > 0
     fail_msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │    radarr_cfg_database_type=postgres requires all options set.    │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ radarr_cfg_database_host: '{{ _radarr_cfg_database_host.raw }}'
-      │ radarr_cfg_database_port: '{{ _radarr_cfg_database_port.raw }}'
-      │ radarr_cfg_database_user: '{{ _radarr_cfg_database_user.raw }}'
-      │ radarr_cfg_database_password: '{{ _radarr_cfg_database_password.raw }}'
-      │ radarr_cfg_database_main: '{{ _radarr_cfg_database_main.raw }}'
-      │ radarr_cfg_database_log: '{{ _radarr_cfg_database_log.raw }}'
 
-- name: 'Prep | assert SSL requirements'
-  when: _radarr_cfg_enable_ssl.raw
+      ✘ Backup location not set.
+      Backups enabled but no backup location defined.
+
+      radarr_flg_backup: {{ radarr_flg_backup }}
+      radarr_cfg_backup_dir: {{ radarr__cfg._backup_dir }}
+
+- name: 'Prep | assert | restore enabled and location defined'
+  when: radarr_flg_restore
   ansible.builtin.assert:
     quiet: true
     that:
-      - _radarr_cfg_ssl_cert_path.raw | length > 0
+      - radarr__cfg._backup_dir | length > 0
     fail_msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │                     SSL Requirements NOT met.                     │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ radarr_cfg_enable_ssl=true requires:
-      │
-      │ radarr_cfg_ssl_cert_path set
 
-- name: 'Prep | assert update script requirements'
-  when: not _radarr_cfg_update_mechanism.raw
+      ✘ Backup location not set.
+      Backups enabled but no backup location defined.
+
+      radarr_flg_restore: {{ radarr_flg_restore }}
+      radarr_cfg_backup_dir: {{ radarr__cfg._backup_dir }}
+
+- name: 'Prep | assert | config enabled and source defined'
+  when: radarr_flg_config
   ansible.builtin.assert:
     quiet: true
     that:
-      - _radarr_cfg_update_script_path.raw | length > 0
+      - radarr__cfg._dir | length > 0
     fail_msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │              Update mechanism requirements NOT met.               │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ radarr_cfg_update_mechanism=false requires:
-      │
-      │ radarr_cfg_update_script_path set.
 
-- name: 'Prep | manage users'
-  when: _radarr_srv_create_user.raw
-  ansible.builtin.include_role:
-    name: 'r_pufky.deb.users'
-    tasks_from: 'role_account_add.yml'
-  vars:
-    users_role_user: '{{ radarr_role_user }}'
-    users_role_group: '{{ radarr_role_group }}'
+      ✘ Config source not set.
+      Config source enabled but no config source defined.
 
-- name: 'Prep | enumerate system user {{ _radarr_srv_user.raw }}'
+      radarr_flg_config: {{ radarr_flg_config }}
+      radarr_cfg_dir: {{ radarr__cfg._dir }}
+
+- name: '{{ "Prep | account | query user " ~ radarr__srv._user }}'
+  ansible.builtin.command: '{{ "id " ~ radarr__srv._user }}'
+  failed_when: false
+  register: radarr__cfg_check
+  changed_when: radarr__cfg_check.rc > 0
+
+- name: '{{ "Prep | account | query group " ~ radarr__srv._group }}'
+  ansible.builtin.command: '{{ "groups " ~ radarr__srv._group }}'
+  failed_when: false
+  register: radarr__group_check
+  changed_when: radarr__group_check.rc > 0
+
+- name: '{{ "Prep | account | create group " ~ radarr__srv._group }}'
+  when: radarr__group_check.rc != 0
+  ansible.builtin.group:
+    gid: '{{ radarr___group.gid }}'
+    name: '{{ radarr___group.name }}'
+    state: 'present'
+
+- name: '{{ "Prep | account | create user " ~ radarr__srv._user }}'
+  when: radarr__cfg_check.rc != 0
   ansible.builtin.user:
-    name: '{{ _radarr_srv_user.raw }}'
+    name: '{{ radarr___user.name }}'
+    group: '{{ radarr___user.group }}'
+    uid: '{{ radarr___user.uid }}'
+    shell: '{{ radarr___user.shell }}'
+    home: '{{ radarr___user.home }}'
+    create_home: '{{ radarr___user.create_home }}'
+    password: '{{ radarr___user.password }}'
+    password_lock: '{{ radarr___user.password_lock }}'
+    update_password: '{{ radarr___user.update_password }}'
+    expires: '{{ radarr___user.expires }}'
+    system: '{{ radarr___user.system }}'
+
+# Pre-existing users may have a different UID/GID/Home.
+- name: '{{ "Prep | account | enumerate " ~ radarr__srv._user }}'
+  ansible.builtin.user:
+    name: '{{ radarr__srv._user }}'
   check_mode: true
   changed_when: false
-  register: _radarr_srv_user_query
+  register: radarr__cfg_query
 
-- name: 'Prep | parse system user UID/GID'
+- name: 'Prep | fact | parse service UID/GID'
   ansible.builtin.set_fact:
-    _radarr_srv_user: '{{
-        _radarr_srv_user |
-        combine({"_uid": _radarr_srv_user_query.uid})
-      }}'
-    _radarr_srv_group: '{{
-        _radarr_srv_group |
-        combine({"_gid": _radarr_srv_user_query.group})
-      }}'
+    radarr__cfg: "{{ radarr__cfg | r_pufky.data.v3(
 
-- name: 'Prep | stop services'
+        _uid=radarr__cfg_query.uid,
+        _gid=radarr__cfg_query.group,
+      ) }}"
+
+- name: 'Prep | systemd | stop radarr.service'
   ansible.builtin.systemd:
-    name: '{{ item }}'
+    name: 'radarr.service'
     state: 'stopped'
   failed_when: false
-  loop:
-    - 'radarr.service'

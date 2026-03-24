@@ -1,0 +1,16 @@
+---
+###############################################################################
+# Maintenance
+###############################################################################
+# Prune any old files from previous role versions. This is executed before any
+# operations with the new role version.
+#
+# Use shell command to increase execution speed for multiple directories.
+
+# * Radarr moved to /opt/radarr/src.
+- name: 'Maintenance | 6.0.0 | remove old versions'
+  ansible.builtin.shell: >-
+    rm -rf /opt/radarr/radarr* &&
+  args:
+    executable: '/bin/bash'
+    removes: '/opt/radarr/radarr'

@@ -3,6 +3,24 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Converge | apply r_pufky.arr.radarr'
+    # Inject config.xml and reset DBs; config.xml tested after restore.
+    - name: 'Converge | role | r_pufky.arr.radarr (pre-configured config.xml)'
       ansible.builtin.include_role:
         name: 'r_pufky.arr.radarr'
+      vars:
+        radarr_flg_config: true
+        radarr_cfg_dir: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default"
+          }}'
+
+    - name: 'Converge | role | r_pufky.arr.radarr (create db backup)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.arr.radarr'
+      vars:
+        radarr_flg_backup: true
+
+    - name: 'Converge | role | r_pufky.arr.radarr (restore)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.arr.radarr'
+      vars:
+        radarr_flg_restore: true

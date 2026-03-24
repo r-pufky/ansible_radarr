@@ -6,7 +6,7 @@
   <EnableSsl>False</EnableSsl>
   <SslPort>9898</SslPort>
   <SslCertPath></SslCertPath>
-  <SslCertPassword>test</SslCertPassword>
+  <SslCertPassword></SslCertPassword>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
   <ApiKey>abcdef1234567890abcdef1234567890</ApiKey>
@@ -18,5 +18,11 @@
   <UpdateMechanism>BuiltIn</UpdateMechanism>
   <UpdateScriptPath></UpdateScriptPath>
   <LaunchBrowser>False</LaunchBrowser>
+  <PostgresHost>localhost</PostgresHost>
+  <PostgresPort>5432</PostgresPort>
+  <PostgresUser>radarr</PostgresUser>
+  <PostgresPassword>radarr</PostgresPassword>
+  <PostgresMainDb>radarr-main</PostgresMainDb>
+  <PostgresLogDb>radarr-log</PostgresLogDb>
   <Theme>auto</Theme>
 </Config>

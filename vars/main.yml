@@ -8,35 +8,36 @@
 # * Branch for new Debian releases.
 # * KEEP a separate change log as changes are made.
 # * Use bare-metal docs to validate package/process changes.
-# * Update role defaults (includes updating defaults, tasks):
-#   * Use configuration docs to add new variables.
-#   * Use defaults to remove any changed/deprecated variables.
+# * Update defaults.
 # * Update tests for any changes.
-#   * Use BARE VERSION for find and replace to set new version.
-# * Standard role validation testing (yamllint, ansible-lint, to-do, no-qa).
-# * Tag with OS-APP-ROLE version.
+# * Standard validation testing (yamllint, ansible-lint, to-do, no-qa).
 #
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr
 # * https://github.com/Radarr/Radarr/releases
-# yamllint enable rule:line-length
 
-# Last time Radarr options were validated against a default configuration.
-radarr_role_validate_date: '2025-10-07'
-radarr_role_validate_release: 'trixie'
-radarr_role_validate_version: 'v6.0.4.10291'
-radarr_role_validate_script_release: '3.0.12'
-radarr_role_validate_script_date: '2024-04-09'
+radarr___release: "{{ {} | r_pufky.data.v3(
+
+    _date='2026-03-24',
+    _debian='trixie',
+    _app='v6.0.4.10291',
+    _script_release='3.0.12',
+    _script_date='2024-04-09',
+  ) }}"
 
 ###############################################################################
 # APT Packages
 ###############################################################################
 
-radarr_role_packages:
+radarr___packages:
   - 'sqlite3'  # Radarr DB.
   - 'gnupg2'  # GPG for certificates.
   - 'ca-certificates'  # Up to date certificates for certificate validation.
   - 'libicu76'  # International Unicode support for .NET.
+
+  # Ansible.
+  - 'xz-utils'  # xz archives.
+  - 'rsync'  # ansible.posix.synchronize.
 
 ###############################################################################
 # Radarr GitHub Options
@@ -44,30 +45,35 @@ radarr_role_packages:
 # Reference:
 # * https://github.com/Radarr/Radarr/releases/latest
 
-radarr_role_repo_release_owner: 'Radarr'
-radarr_role_repo_release_repo: 'Radarr'
-radarr_role_repo_extract_dir: '/opt/radarr'
-radarr_role_repo_extract_symlink: '/opt/radarr/radarr'
-radarr_role_repo_release_specifier: 'v'
-radarr_role_repo_release_asset:
-  'Radarr.master.{BARE_VERSION}.linux-core-x64.tar.gz'
-radarr_role_repo_extract_migrate_files:
-  - 'radarr.db'
-  - 'radarr.db-shm'  # Radarr never closes DB's correctly.
-  - 'radarr.db-wal'
-  - 'logs.db'
-  - 'logs.db-shm'
-  - 'logs.db-wal'
+radarr___repo_url:
+  'https://github.com/Radarr/Radarr/releases/download/'
+radarr___package: '{{
+    "Radarr.master." ~ radarr___release._app[1:] ~ ".linux-core-x64.tar.gz"
+  }}'
+
+radarr___app: "{{ {} | r_pufky.data.v3(
+
+    _version=radarr___release._app,
+    _package=radarr___package,
+    _var_dir='/var/opt/radarr',
+    _cfg='/var/opt/radarr/config.xml',
+    _opt_dir='/opt/radarr',
+    _src_dir='/opt/radarr/src',
+    _app='/opt/radarr/src/' ~ radarr___release._app,
+    _service='/etc/systemd/system/radarr.service',
+    _base_url=radarr___repo_url,
+    _url=radarr___repo_url ~ radarr___release._app ~ '/' ~ radarr___package,
+  ) }}"
 
 ###############################################################################
 # Default Radarr User/Group
 ###############################################################################
 
-radarr_role_group:
+radarr___group:
   name: 'media'
   gid: 5555
 
-radarr_role_user:
+radarr___user:
   name: 'media'
   group: 'media'
   uid: 5555

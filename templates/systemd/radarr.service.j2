@@ -1,0 +1,16 @@
+[Unit]
+Description=Radarr Daemon.
+After=network.target
+
+[Service]
+Type=simple
+ExecStart={{ radarr__cfg._app ~ "/Radarr" }} -nobrowser -data={{ radarr__cfg._var_dir }}
+TimeoutStopSec=20
+Restart=always
+User={{ radarr__srv._user }}
+Group={{ radarr__srv._group }}
+UMask=0002
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

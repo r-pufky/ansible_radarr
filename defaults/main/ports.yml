@@ -7,7 +7,7 @@
 # Reference:
 # * https://github.com/r-pufky/ansible_ufw
 
-radarr_srv_ports:
+radarr_ports:
   - proto: 'tcp'
     from_ip: 'any'
     to_port: 7878
