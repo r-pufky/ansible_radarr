@@ -70,7 +70,7 @@ DB's, etc. Existing installs likely want to use **backup** and **restore**.
     name: 'r_pufky.arr.radarr'
   vars:
     radarr_flg_config: true
-    radarr_cfg_dir: 'host_vars/radarr.example.com/data'
+    radarr_cfg_d: 'host_vars/radarr.example.com/data'
 ```
 
 #### Dynamic Deployments
@@ -90,14 +90,14 @@ or leave radarr_flg_config disabled to leave existing config untouched.
     name: 'r_pufky.arr.radarr'
   vars:
     radarr_flg_backup: true
-    radarr_cfg_backup_dir: '/tmp'
+    radarr_cfg_backup_d: '/tmp'
 
 - name: 'Restore from backup.'
   ansible.builtin.include_role:
     name: 'r_pufky.arr.radarr'
   vars:
     radarr_flg_restore: true
-    radarr_cfg_backup_dir: '/tmp'
+    radarr_cfg_backup_d: '/tmp'
 ```
 
 ## Development
@@ -107,6 +107,12 @@ Configure [environment][a].
 # Run all tests.
 molecule test --all
 ```
+
+Testing variables:
+
+  Variable            | Type | Description
+ ---------------------|------|-------------
+  molecule_flg_inject | bool | Disable **get_url** to inject files locally.
 
 ### [Releases][b]
 
@@ -144,7 +150,7 @@ PGP: [466EEC2B67516C7117C85CE3A0BC35D16698BAB9][d] | [github gist][e]
 [j]: https://github.com/r-pufky/ansible_radarr/tree/main/defaults/main/main.yml
 [k]: https://github.com/r-pufky/ansible_radarr/blob/main/defaults/main/ports.yml
 [l]: https://wiki.servarr.com/en/radarr/postgres-setup
-[m]: https://github.com/r-pufky/ansible_radarr/blob/main/files/postgres/config.xml
-[n]: https://github.com/r-pufky/ansible_radarr/blob/main/files/
+[m]: https://github.com/r-pufky/ansible_radarr/blob/main/templates/postgres/config.xml
+[n]: https://github.com/r-pufky/ansible_radarr/blob/main/templates/
 [o]: https://radarr.video
 [p]: https://wiki.servarr.com/radarr/faq#help-i-have-locked-myself-out

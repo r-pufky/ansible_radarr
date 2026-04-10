@@ -9,33 +9,50 @@
 # large metadata downloads on new version if not migrated with databases.
 # Exclude from removal during configuration sync.
 
-- name: 'Config | filetree | deploy managed files'
+- name: 'Config | filetree | set managed directories'
+  ansible.builtin.file:
+    path: '{{ radarr___app._var_d ~ "/" ~ item.path }}'
+    owner: '{{ radarr__srv._user }}'
+    group: '{{ radarr__srv._group }}'
+    mode: '0750'
+    state: 'directory'
+  loop: '{{ query("community.general.filetree", radarr__cfg._d) }}'
+  loop_control:
+    label: '{{ item.path }}'
+  when: item.state == 'directory'
+
+- name: 'Config | filetree | set managed files'
   ansible.builtin.template:
     src: '{{ item.src }}'
-    dest: '{{ radarr__cfg._var_dir ~ "/" ~ item.path }}'
+    dest: '{{ radarr___app._var_d ~ "/" ~ item.path }}'
     owner: '{{ radarr__srv._user }}'
     group: '{{ radarr__srv._group }}'
     mode: '0640'
-  loop: '{{ query("community.general.filetree", radarr__cfg._dir) }}'
+  loop: '{{ query("community.general.filetree", radarr__cfg._d) }}'
   loop_control:
     label: '{{ item.path }}'
   when: item.state == 'file'
-  register: radarr__local
 
 - name: 'Config | filesystem | query remote files'
   ansible.builtin.find:
-    paths: '{{ radarr__cfg._var_dir }}'
-    file_type: 'file'
+    paths: '{{ radarr___app._var_d }}'
+    file_type: 'any'
+    hidden: true
     recurse: true
     excludes: 'MediaCover'  # Ignore MediaCover to prevent metadata deletion.
   register: radarr__remote
 
-- name: 'Config | filesystem | remove unmanaged files'
+- name: 'Config | filetree | remove unmanaged files and directories'
   ansible.builtin.file:
     path: '{{ item.path }}'
     state: 'absent'
-  loop: '{{ radarr__remote.files }}'
+  loop: '{{ radarr__remote.files | sort(attribute="path", reverse=true) }}'
   loop_control:
     label: '{{ item.path }}'
   when: >
-    item.path not in radarr__local.results | map(attribute='dest') | list
+    item.path not in
+    (
+      query("community.general.filetree", radarr__cfg._d) |
+      map(attribute='path') |
+      map('regex_replace', '^', radarr___app._var_d ~ "/") | list
+    )

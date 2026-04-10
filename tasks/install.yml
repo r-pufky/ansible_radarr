@@ -19,23 +19,19 @@
 
 - name: 'Install | filesystem | set system directories'
   ansible.builtin.file:
-    path: '{{ item }}'
+    path: '{{ radarr___app._src_d }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
     state: 'directory'
-  loop:
-    - '{{ radarr___app._src_dir }}'
 
 - name: 'Install | filesystem | set service directories'
   ansible.builtin.file:
-    path: '{{ item }}'
+    path: '{{ radarr___app._var_d }}'
     owner: '{{ radarr__srv._user }}'
     group: '{{ radarr__srv._group }}'
     mode: '0755'
     state: 'directory'
-  loop:
-    - '{{ radarr___app._var_dir }}'
 
 - name: 'Install | packages'
   ansible.builtin.include_role:
@@ -47,7 +43,7 @@
 
 - name: 'Install | filesystem | find previous installations'
   ansible.builtin.find:
-    paths: '{{ radarr__cfg._src_dir }}'
+    paths: '{{ radarr___app._src_d }}'
     file_type: 'directory'
     recurse: false
     excludes:
@@ -63,7 +59,7 @@
     label: '{{ item.path }}'
 
 - name: 'Install | url | 🗘 Radarr (~1 minute) 🗘'
-  when: not (url_inject_enable | default(false))
+  when: not (molecule_flg_inject | default(false))
   ansible.builtin.get_url:
     url: '{{ radarr__cfg._url }}'
     dest: '{{ "/tmp/" ~ radarr__cfg._package }}'
@@ -76,9 +72,9 @@
   register: radarr__cmd
   until: radarr__cmd is succeeded
 
-- name: '{{ "Install | filesystem | set " ~ radarr__cfg._app }}'
+- name: '{{ "Install | filesystem | set " ~ radarr__cfg._app_d }}'
   ansible.builtin.file:
-    path: '{{ radarr__cfg._app }}'
+    path: '{{ radarr__cfg._app_d }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
@@ -86,19 +82,19 @@
 
 - name: 'Install | filesystem | unpack Radarr'
   ansible.builtin.unarchive:
-    creates: '{{ radarr__cfg._app ~ "/Radarr" }}'
+    creates: '{{ radarr__cfg._app_d ~ "/Radarr" }}'
     src: '{{ "/tmp/" ~ radarr__cfg._package }}'
     remote_src: true
-    dest: '{{ radarr__cfg._app }}'
+    dest: '{{ radarr__cfg._app_d }}'
     owner: 'root'
     group: 'root'
     mode: 'a-st'
     extra_opts: ['--strip-components=1']
 
-- name: '{{ "Install | filesystem | set " ~ radarr__cfg._service }}'
+- name: '{{ "Install | filesystem | set " ~ radarr___app._service }}'
   ansible.builtin.template:
     src: 'systemd/radarr.service.j2'
-    dest: '{{ radarr__cfg._service }}'
+    dest: '{{ radarr___app._service }}'
     owner: 'root'
     group: 'root'
     mode: '0644'

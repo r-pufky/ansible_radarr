@@ -3,10 +3,10 @@
 # Feature Flags
 ###############################################################################
 
-# 1. Backup config to radarr_cfg_backup_dir?
+# 1. Backup config to radarr_cfg_backup_d?
 #
 # Backup existing config data directory and exit role. Creates archive of
-# /var/opt/radarr. radarr_cfg_backup_dir created if non-existent. Services
+# /var/opt/radarr. radarr_cfg_backup_d created if non-existent. Services
 # stopped, files backed up, services started.
 #
 # Default: False.
@@ -38,7 +38,7 @@ radarr_flg_install: true
 
 # 5. Set configuration data?
 #
-# Overwrite config data directory sourced from radarr_cfg_dir. Use backup and
+# Overwrite config data directory sourced from radarr_cfg_d. Use backup and
 # restore to manage configuration data. Stops service, deploys user config
 # data, updates and starts services.
 #
@@ -60,11 +60,11 @@ radarr_flg_config: false
 #       PATCH: Safe - Usually requires no role updates.
 #   RECOMMEND: Only increment MINOR.PATCH.
 #
-# Default: 'v6.0.4.10291'.
+# Default: 'v6.1.1.10360'.
 #
 # Reference:
 # * https://github.com/Radarr/Radarr/releases/latest
-radarr_srv_version: 'v6.0.4.10291'
+radarr_srv_version: 'v6.1.1.10360'
 
 # Github access token (radarr).
 #
@@ -124,20 +124,20 @@ radarr_srv_group: 'media'
 #
 # Use radarr_flg_backup, radarr_flg_restore to include MediaCover metadata.
 #
-# deluge_cfg_dir: 'host_vars/radarr.example.com/config'
+# radarr_cfg_d: 'host_vars/radarr.example.com/config'
 #
 # Default: '' (use minimally configured default).
-radarr_cfg_dir: ''
+radarr_cfg_d: ''
 
 # Role backup location.
 #
 # All backup operations for a given role execution are stored locally on
 # ansible controller with the format 'YYYY-MM-DDTHHMMSS_{FILE}'.
 #
-# radarr_cfg_backup_dir: 'data/radarr'
+# radarr_cfg_backup_d: 'data/radarr'
 #
 # Default: ''
-radarr_cfg_backup_dir: ''
+radarr_cfg_backup_d: ''
 
 # Backup metadata (MediaCover) directory?
 #

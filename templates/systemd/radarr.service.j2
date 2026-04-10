@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart={{ radarr__cfg._app ~ "/Radarr" }} -nobrowser -data={{ radarr__cfg._var_dir }}
+ExecStart={{ radarr__cfg._app_d ~ "/Radarr" }} -nobrowser -data={{ radarr___app._var_d }}
 TimeoutStopSec=20
 Restart=always
 User={{ radarr__srv._user }}

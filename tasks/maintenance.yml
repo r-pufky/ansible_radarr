@@ -9,8 +9,7 @@
 
 # * Radarr moved to /opt/radarr/src.
 - name: 'Maintenance | 6.0.0 | remove old versions'
-  ansible.builtin.shell: >-
-    rm -rf /opt/radarr/radarr* &&
+  ansible.builtin.shell: 'rm -rf /opt/radarr/radarr*'
   args:
     executable: '/bin/bash'
     removes: '/opt/radarr/radarr'
