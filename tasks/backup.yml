@@ -8,12 +8,12 @@
   ansible.builtin.set_fact:
     radarr__archive: '{{ "/tmp/" ~ radarr__srv._start ~ "_config.tar.xz" }}'
 
-- name: 'Backup | warning | ⚠ Metadata Enabled ⚠'
+- name: 'Backup | warning | 🛆 Metadata Enabled 🛆'
   when: radarr__cfg._backup_metadata
   ansible.builtin.debug:
     msg: |
 
-      ⚠ Metadata Enabled ⚠
+      🛆 Metadata Enabled 🛆
 
       /var/opt/radarr/MediaCover may be Multi-GB. A backup effectively doubles
       the space used during the process and may fail if low disk space.
