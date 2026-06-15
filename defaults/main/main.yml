@@ -60,11 +60,11 @@ radarr_flg_config: false
 #       PATCH: Safe - Usually requires no role updates.
 #   RECOMMEND: Only increment MINOR.PATCH.
 #
-# Default: 'v6.1.1.10360'.
+# Default: 'v6.2.1.10461'.
 #
 # Reference:
 # * https://github.com/Radarr/Radarr/releases/latest
-radarr_srv_version: 'v6.1.1.10360'
+radarr_srv_version: 'v6.2.1.10461'
 
 # Github access token (radarr).
 #
